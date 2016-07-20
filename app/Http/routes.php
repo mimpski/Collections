@@ -14,8 +14,10 @@
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/listing', ['as' => 'item_listing', 'uses' => 'Pages@item_listing']);
+
+Route::get('/create-a-collection', ['as' => 'create_a_collection', 'uses' => 'CollectionController@create_a_collection']);
+Route::get('/listing/{id}', ['as' => 'add_items', 'uses' => 'CollectionController@add_items']);
+Route::get('/add-to-collection/{id}', ['as' => 'add_item', 'uses' => 'CollectionController@add']);
+Route::get('/view-collection', ['as' => 'collection_view', 'uses' => 'CollectionController@showCollection']);
 
 Route::auth();
-
-Route::get('/home', 'HomeController@index');
