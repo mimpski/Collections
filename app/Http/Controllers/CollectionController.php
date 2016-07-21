@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 use App\Collection;
 use App\Item;
+use App\Input;
 use App\CollectionItem;
 use Illuminate\Support\Facades\Auth;
 
-use Illuminate\Http\Request;
-
+//use Illuminate\Http\Request;
+use Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
@@ -26,12 +27,12 @@ class CollectionController extends Controller
 
     public function save_collection(Request $request){
         // Validate all the data that is passed through the form
-        $this->validate($request, [
-            'name' => 'required',
-            'user_id' => 'required'
-        ]);
+        // $this->validate($request, [
+        //     'name' => 'required',
+        //     'user_id' => 'required'
+        // ]);
         // Turn that data into a request
-        $input = $request->all();
+        $input = Request::all();
 
         // Create the new collection with that data
         $Collection =  new Collection();
@@ -52,6 +53,35 @@ class CollectionController extends Controller
       // Get the list of items
       $items = Item::limit(30)->get();
       return view('pages.full-listing', compact('user','items','collectionDetails'));
+    }
+
+    public function view_collection(Request $request){
+        // Validate all the data that is passed through the form
+        $input = Request::all();
+
+        $item1 = new CollectionItem();
+        $item1->collection_id = $input['collection_id'];
+        $item1->item = $input['item0'];
+        $item1->save();
+
+        $item2 = new CollectionItem();
+        $item2->collection_id = $input['collection_id'];
+        $item2->item = $input['item1'];
+        $item2->save();
+
+        $item3 = new CollectionItem();
+        $item3->collection_id = $input['collection_id'];
+        $item3->item = $input['item2'];
+        $item3->save();
+
+        $id = $input['collection_id'];
+
+        return redirect()->route('individual_collection', compact('id'));
+    }
+
+    public function individual_collection($id){
+      $collection = Collection::where('id',$id)->first();
+      return view('pages.view-collection', compact('collection'));
     }
 
 
