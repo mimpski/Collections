@@ -20,22 +20,38 @@ class CollectionController extends Controller
     }
 
     public function create_a_collection(){
+      $user = Auth::user()->id;
+      return view('pages.create-collection', compact('user'));
+    }
 
-        // Create a new collection and set the user id
+    public function save_collection(Request $request){
+        // Validate all the data that is passed through the form
+        $this->validate($request, [
+            'name' => 'required',
+            'user_id' => 'required'
+        ]);
+        // Turn that data into a request
+        $input = $request->all();
+
+        // Create the new collection with that data
         $Collection =  new Collection();
-        $Collection->user_id=Auth::user()->id;
+        $Collection->name = $input['name'];
+        $Collection->user_id = $input['user_id'];
         $Collection->save();
 
-        // Get the id of the newly created collection
-        $newCollectionId = $Collection->id;
+        return redirect()->route('add_items');
+    }
 
-        // Get the list of items
-        $items = Item::limit(30)->get();
-        $collectionDetails = Collection::where('id', $newCollectionId)->first();
+    public function add_items(){
+      // Get the users Id
+      $user = Auth::user()->id;
 
-        dd($collectionDetails);
+      // Get the details of the new collections
+      $collectionDetails = Collection::all()->where('user_id', $user)->last();
 
-        return redirect()->route('item_listing', compact('newCollectionId', 'items'));
+      // Get the list of items
+      $items = Item::limit(30)->get();
+      return view('pages.full-listing', compact('user','items','collectionDetails'));
     }
 
 

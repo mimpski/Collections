@@ -8,6 +8,12 @@ class Collection extends Model
 {
     protected $table = 'collections';
 
+    protected $fillable = [
+        'user_id',
+        'name',
+        'id'
+    ];
+
     public function user(){
         return $this->belongsTo('App\User');
     }
