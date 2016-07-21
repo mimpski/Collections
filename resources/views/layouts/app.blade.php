@@ -24,6 +24,7 @@
             margin-right: 6px;
         }
     </style>
+    <meta name="csrf-token" content="{!! Session::token() !!}">
 </head>
 <body id="app-layout">
     <nav class="navbar navbar-default navbar-static-top">
@@ -48,6 +49,7 @@
                 <!-- Left Side Of Navbar -->
                 <ul class="nav navbar-nav">
                     <li><a href="{{ url('/home') }}">Home</a></li>
+                    <li><a href="{{ URL::route('create_a_collection') }}">Create a collection</a></li>
                 </ul>
 
                 <!-- Right Side Of Navbar -->
