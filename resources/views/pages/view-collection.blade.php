@@ -10,6 +10,12 @@
                 <div class="panel-body">
                   <ul>
                     {{ $collection->name }}
+
+                    @foreach($items as $item)
+
+                    <li>{{$item->identifier}}</li>
+
+                    @endforeach
                   </ul>
                 </div>
             </div>

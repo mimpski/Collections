@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 //use Illuminate\Http\Request;
 use Request;
+use DB;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
@@ -80,8 +81,13 @@ class CollectionController extends Controller
     }
 
     public function individual_collection($id){
+      // Get the collection details based on the id
       $collection = Collection::where('id',$id)->first();
-      return view('pages.view-collection', compact('collection'));
+
+      // Run this raw SQL (must be refactored) to get the item data for the collection
+      $items = DB::select( DB::raw("SELECT i.* FROM items i, collections_items ci, collections c WHERE i.id = ci.item AND ci.collection_id = c.id AND c.id = $id;") );
+      
+      return view('pages.view-collection', compact('collection','items'));
     }
 
 
