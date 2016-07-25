@@ -11,11 +11,13 @@
                   <ul>
                     {{ $collection->name }}
 
-                    @foreach($items as $item)
-
-                    <li>{{$item->identifier}}</li>
-
-                    @endforeach
+                    @if($items)
+                      @foreach($items as $item)
+                        <li>{{ $item->identifier }}</li>
+                      @endforeach
+                    @else
+                      <p>Nothing in this collection</a></p>
+                    @endif
                   </ul>
                 </div>
             </div>

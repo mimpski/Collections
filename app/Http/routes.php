@@ -11,9 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', ['as' => 'home', 'uses' => 'PagesController@homepage']);
 Route::get('/create-a-collection', ['as' => 'create_a_collection', 'uses' => 'CollectionController@create_a_collection']);
 Route::post('/save-collection', ['as' => 'save_collection', 'uses' => 'CollectionController@save_collection']);
 Route::get('/listing', ['as' => 'add_items', 'uses' => 'CollectionController@add_items']);
