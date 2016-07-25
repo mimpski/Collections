@@ -13,8 +13,7 @@ use DB;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-class CollectionController extends Controller
-{
+class CollectionController extends Controller{
 
     public function __construct(){
         $this->middleware('auth');
@@ -81,6 +80,35 @@ class CollectionController extends Controller
       $items = DB::select( DB::raw("SELECT i.* FROM items i, collections_items ci, collections c WHERE i.id = ci.item AND ci.collection_id = c.id AND c.id = $id;") );
 
       return view('pages.collections.view-collection', compact('collection','items'));
+    }
+
+    public function edit_collection($id){
+      $user = Auth::user()->id;
+      // Get the collection details based on the id
+      $collection = Collection::where('id',$id)->first();
+
+      // Run this raw SQL (must be refactored) to get the item data for the collection
+      $items = DB::select( DB::raw("SELECT i.* FROM items i, collections_items ci, collections c WHERE i.id = ci.item AND ci.collection_id = c.id AND c.id = $id;") );
+
+      return view('pages.collections.edit-collection', compact('collection','items'));
+    }
+
+    public function update_collection(Request $request){
+        $input = Request::all();
+        $id = Request::get('id');
+
+        // Create the new collection with that data
+        $Collection = Collection::where('id',$id)->first();
+        $Collection->name = $input['name'];
+        $Collection->save();
+        $user = Auth::user()->id;
+        return redirect()->route('my_collections', compact('user'));
+    }
+
+    public function my_collections(){
+      $user = Auth::user()->id;
+      $collections = Collection::where('user_id',$user)->get();
+      return view('pages.collections.my-collections', compact('user', 'collections'));
     }
 
 
