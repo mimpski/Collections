@@ -16,23 +16,16 @@ use App\Http\Controllers\Controller;
 class CollectionController extends Controller
 {
 
-    public function __construct()
-    {
+    public function __construct(){
         $this->middleware('auth');
     }
 
     public function create_a_collection(){
       $user = Auth::user()->id;
-      return view('pages.create-collection', compact('user'));
+      return view('pages.collections.create-collection', compact('user'));
     }
 
     public function save_collection(Request $request){
-        // Validate all the data that is passed through the form
-        // $this->validate($request, [
-        //     'name' => 'required',
-        //     'user_id' => 'required'
-        // ]);
-        // Turn that data into a request
         $input = Request::all();
 
         // Create the new collection with that data
@@ -53,7 +46,7 @@ class CollectionController extends Controller
 
       // Get the list of items
       $items = Item::limit(30)->get();
-      return view('pages.full-listing', compact('user','items','collectionDetails'));
+      return view('pages.collections.full-listing', compact('user','items','collectionDetails'));
     }
 
     public function view_collection(Request $request){
@@ -86,8 +79,8 @@ class CollectionController extends Controller
 
       // Run this raw SQL (must be refactored) to get the item data for the collection
       $items = DB::select( DB::raw("SELECT i.* FROM items i, collections_items ci, collections c WHERE i.id = ci.item AND ci.collection_id = c.id AND c.id = $id;") );
-      
-      return view('pages.view-collection', compact('collection','items'));
+
+      return view('pages.collections.view-collection', compact('collection','items'));
     }
 
 

@@ -7,8 +7,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use Illuminate\Http\Request;
 
-class Pages extends Controller
-{
+class Pages extends Controller{
+
+    public function __construct(){
+        $this->middleware('auth');
+    }
 
     /**
      * Show the application dashboard.
@@ -19,4 +22,6 @@ class Pages extends Controller
       $items = Item::limit(30)->get();
       return view('pages.full-listing', compact('items', 'newCollectionId'));
     }
+
+
 }
