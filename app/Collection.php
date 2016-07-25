@@ -11,7 +11,8 @@ class Collection extends Model
     protected $fillable = [
         'user_id',
         'name',
-        'id'
+        'id',
+        'collections_id'
     ];
 
     public function user(){
@@ -20,4 +21,5 @@ class Collection extends Model
     public function collectionItem(){
         return $this->hasMany('App\Item');
     }
+
 }

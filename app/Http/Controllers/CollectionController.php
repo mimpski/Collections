@@ -96,13 +96,21 @@ class CollectionController extends Controller{
     public function update_collection(Request $request){
         $input = Request::all();
         $id = Request::get('id');
-
         // Create the new collection with that data
         $Collection = Collection::where('id',$id)->first();
         $Collection->name = $input['name'];
         $Collection->save();
         $user = Auth::user()->id;
         return redirect()->route('my_collections', compact('user'));
+    }
+
+    public function update_items($id){
+      $user = Auth::user()->id;
+      // Get the details of the new collections
+      $collectionDetails = Collection::where('id', $id)->first();
+      // Get the list of items
+      $items = Item::limit(30)->get();
+      return view('pages.collections.full-listing', compact('user','items','collectionDetails'));
     }
 
     public function my_collections(){

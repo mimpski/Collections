@@ -28,11 +28,15 @@
                 <div class="panel-heading">Featured in this collection</div>
 
                 <div class="panel-body">
-                  @foreach($items as $item)
-                  <ul>
-                    <li>{{ $item->identifier }}</li>
-                  </ul>
-                  @endforeach
+                  @if($items)
+                    @foreach($items as $item)
+                    <ul>
+                      <li>{{ $item->identifier }}</li>
+                    </ul>
+                    @endforeach
+                  @else
+                    <p>Nothing in this collection - <a href="/update-listing/{{$collection->id}}">Why not add something?</a></p>
+                  @endif
                 </div>
 
             </div>
