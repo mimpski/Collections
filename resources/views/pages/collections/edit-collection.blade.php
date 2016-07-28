@@ -34,6 +34,7 @@
                       <li>{{ $item->identifier }}</li>
                     </ul>
                     @endforeach
+                    <a href="/update-listing/{{$collection->id}}">Change these items</a>
                   @else
                     <p>Nothing in this collection - <a href="/update-listing/{{$collection->id}}">Why not add something?</a></p>
                   @endif

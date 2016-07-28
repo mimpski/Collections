@@ -32,16 +32,19 @@ class CollectionController extends Controller{
         $Collection->name = $input['name'];
         $Collection->user_id = $input['user_id'];
         $Collection->save();
+        $id = $Collection->id;
 
-        return redirect()->route('add_items');
+        $collectionDetails = Collection::all()->where('id', $id)->first();
+
+        return view('pages.collections.full-listing', compact('id', 'collectionDetails'));
     }
 
-    public function add_items(){
+    public function add_items($id){
       // Get the users Id
       $user = Auth::user()->id;
 
       // Get the details of the new collections
-      $collectionDetails = Collection::all()->where('user_id', $user)->last();
+      $collectionDetails = Collection::all()->where('id', $id)->first();
 
       // Get the list of items
       $items = Item::limit(30)->get();

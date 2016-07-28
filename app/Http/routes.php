@@ -14,7 +14,7 @@
 Route::get('/', ['as' => 'home', 'uses' => 'PagesController@homepage']);
 Route::get('/create-a-collection', ['as' => 'create_a_collection', 'uses' => 'CollectionController@create_a_collection']);
 Route::post('/save-collection', ['as' => 'save_collection', 'uses' => 'CollectionController@save_collection']);
-Route::get('/listing', ['as' => 'add_items', 'uses' => 'CollectionController@add_items']);
+Route::get('/listing/{id}', ['as' => 'add_items', 'uses' => 'CollectionController@add_items']);
 Route::get('/save-to-collection', ['as' => 'add_to_collection', 'uses' => 'CollectionController@add_to_collection']);
 Route::post('/view-collection', ['as' => 'view_collection', 'uses' => 'CollectionController@view_collection']);
 Route::get('/collection/{id}', ['as' => 'individual_collection', 'uses' => 'CollectionController@individual_collection']);
