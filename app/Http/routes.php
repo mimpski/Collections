@@ -21,6 +21,7 @@ Route::get('/collection/{id}', ['as' => 'individual_collection', 'uses' => 'Coll
 Route::get('/edit-collection/{id}', ['as' => 'edit_collection', 'uses' => 'CollectionController@edit_collection']);
 Route::post('/update-collection', ['as' => 'update_collection', 'uses' => 'CollectionController@update_collection']);
 Route::get('/update-listing/{id}', ['as' => 'update_items', 'uses' => 'CollectionController@update_items']);
+Route::post('/update-listing', ['as' => 'update_with_items', 'uses' => 'CollectionController@update_with_items']);
 Route::get('/my-collections', ['as' => 'my_collections', 'uses' => 'CollectionController@my_collections']);
 
 Route::auth();

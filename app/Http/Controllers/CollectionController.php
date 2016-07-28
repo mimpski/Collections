@@ -36,7 +36,9 @@ class CollectionController extends Controller{
 
         $collectionDetails = Collection::all()->where('id', $id)->first();
 
-        return view('pages.collections.full-listing', compact('id', 'collectionDetails'));
+        // Get the list of items
+        $items = Item::limit(30)->get();
+        return view('pages.collections.full-listing', compact('id', 'collectionDetails', 'items'));
     }
 
     public function add_items($id){
@@ -55,22 +57,20 @@ class CollectionController extends Controller{
         // Validate all the data that is passed through the form
         $input = Request::all();
 
-        $item1 = new CollectionItem();
-        $item1->collection_id = $input['collection_id'];
-        $item1->item = $input['item0'];
-        $item1->save();
-
-        $item2 = new CollectionItem();
-        $item2->collection_id = $input['collection_id'];
-        $item2->item = $input['item1'];
-        $item2->save();
-
-        $item3 = new CollectionItem();
-        $item3->collection_id = $input['collection_id'];
-        $item3->item = $input['item2'];
-        $item3->save();
-
         $id = $input['collection_id'];
+
+        $items_checked = $input['item'];
+
+        $collection = CollectionItem::where('collection_id', $id)->delete();
+
+        if(is_array($items_checked)){
+          foreach($items_checked as $item){
+            $value = new CollectionItem();
+            $value->collection_id = $id;
+            $value->item = $item;
+            $value->save();
+          }
+        }
 
         return redirect()->route('individual_collection', compact('id'));
     }
