@@ -19,6 +19,7 @@ class CollectionController extends Controller{
         $this->middleware('auth');
     }
 
+
     public function create_a_collection(){
       $user = Auth::user()->id;
       return view('pages.collections.create-collection', compact('user'));
@@ -47,6 +48,10 @@ class CollectionController extends Controller{
 
       // Get the details of the new collections
       $collectionDetails = Collection::all()->where('id', $id)->first();
+
+      // $selectedItems = CollectionItem::all()->where('collection_id', $id)->get();
+      //
+      // dd($selectedItems);
 
       // Get the list of items
       $items = Item::limit(30)->get();
@@ -113,7 +118,10 @@ class CollectionController extends Controller{
       $collectionDetails = Collection::where('id', $id)->first();
       // Get the list of items
       $items = Item::limit(30)->get();
-      return view('pages.collections.full-listing', compact('user','items','collectionDetails'));
+      // SELECT item FROM collections_items WHERE collection_id = $id;
+      $selectedItems = CollectionItem::where('collection_id', $id)->get(['item'])->toArray();
+
+      return view('pages.collections.full-listing', compact('user','items','collectionDetails'))->with('selectedItems');
     }
 
     public function my_collections(){

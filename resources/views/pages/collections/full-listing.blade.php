@@ -11,7 +11,15 @@
                     {!! Form::hidden('collection_id', $collectionDetails->id) !!}
                     @foreach($items as $item)
                     <div style="display: inline-block; padding: 10px 20px;">
-                      <input type="checkbox" class="item" name="item[]" value="{{ $item->id }}">{{ $item->id }}</li>
+
+                    {{--- @if ( in_array("{{ $item->id }}", $selectedItems[$item]))
+                          <input type="checkbox" class="item" name="item[]" value="{{ $item->id }}" checked="checked">
+
+                      @else ---}}
+                        <input type="checkbox" class="item" name="item[]" value="{{ $item->id }}" checked="">
+
+                      {{ $item->id }}
+
                     </div>
                     @endforeach
                     {!! Form::submit('Save', ['class' => 'btn btn-primary']) !!}
