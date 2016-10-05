@@ -39,7 +39,9 @@ class CollectionController extends Controller{
 
         // Get the list of items
         $items = Item::limit(30)->get();
-        return view('pages.collections.full-listing', compact('id', 'collectionDetails', 'items'));
+        //This returns 0, no items have been selected yet.
+        $selectedItems = CollectionItem::where('collection_id', $id)->get(['item']);
+        return view('pages.collections.full-listing', compact('id', 'collectionDetails', 'items', 'selectedItems'));
     }
 
     public function add_items($id){
@@ -48,10 +50,6 @@ class CollectionController extends Controller{
 
       // Get the details of the new collections
       $collectionDetails = Collection::all()->where('id', $id)->first();
-
-      // $selectedItems = CollectionItem::all()->where('collection_id', $id)->get();
-      //
-      // dd($selectedItems);
 
       // Get the list of items
       $items = Item::limit(30)->get();
@@ -119,9 +117,9 @@ class CollectionController extends Controller{
       // Get the list of items
       $items = Item::limit(30)->get();
       // SELECT item FROM collections_items WHERE collection_id = $id;
-      $selectedItems = CollectionItem::where('collection_id', $id)->get(['item'])->toArray();
-
-      return view('pages.collections.full-listing', compact('user','items','collectionDetails'))->with('selectedItems');
+      $selectedItems = CollectionItem::where('collection_id', $id)->get(['item']);
+      //dd($selectedItems);
+      return view('pages.collections.full-listing', compact('user','items','collectionDetails','selectedItems'));
     }
 
     public function my_collections(){

@@ -10,13 +10,9 @@
                   {!! Form::open(['route' => 'view_collection']) !!}
                     {!! Form::hidden('collection_id', $collectionDetails->id) !!}
                     @foreach($items as $item)
-                    <div style="display: inline-block; padding: 10px 20px;">
+                    <div style="display: inline-block; padding: 10px 20px;" class="item-selection">
 
-                    {{--- @if ( in_array("{{ $item->id }}", $selectedItems[$item]))
-                          <input type="checkbox" class="item" name="item[]" value="{{ $item->id }}" checked="checked">
-
-                      @else ---}}
-                        <input type="checkbox" class="item" name="item[]" value="{{ $item->id }}" checked="">
+                        <input type="checkbox" class="item" name="item[]" value="{{ $item->id }}">
 
                       {{ $item->id }}
 
@@ -25,8 +21,24 @@
                     {!! Form::submit('Save', ['class' => 'btn btn-primary']) !!}
                   {!! Form::close() !!}
                 </div>
+
             </div>
         </div>
     </div>
 </div>
+@endsection
+
+@section('footer-scripts')
+<script>
+  $(document).ready(function() {
+
+      var sites = {!! json_encode($selectedItems->toArray()) !!};
+
+      sites.forEach(function(value) {
+          $(".item[value='" + value.item +"']").prop("checked",true);
+          console.log(value.item);
+      });
+
+  });
+</script>
 @endsection
