@@ -8,16 +8,20 @@
                 <div class="panel-heading">Collection View</div>
 
                 <div class="panel-body">
-                  <ul>
+                  <ul class="collection_item_listing">
                     {{ $collection->name }}
 
                     @if($items)
                       @foreach($items as $item)
-                        <li>{{ $item->identifier }}</li>
+                        <li class="{{ $item->type }}">
+                            <p class="item_name">{{ $item->identifier }}</p>
+                            <img src="/images/items/{{ $item->image }}.jpg" alt="Image of {{ $item->identifier }}" class="item_image"/>
+                        </li>
                       @endforeach
                     @else
                       <p>Nothing in this collection</a></p>
                     @endif
+
                   </ul>
                 </div>
             </div>

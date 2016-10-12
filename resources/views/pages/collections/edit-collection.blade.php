@@ -29,11 +29,14 @@
 
                 <div class="panel-body">
                   @if($items)
+                  <ul class="collection_item_listing">
                     @foreach($items as $item)
-                    <ul>
-                      <li>{{ $item->identifier }}</li>
-                    </ul>
+                      <li class="{{ $item->type }}">
+                          <p class="item_name">{{ $item->identifier }}</p>
+                          <img src="/images/items/{{ $item->image }}.jpg" alt="Image of {{ $item->identifier }}" class="item_image"/>
+                      </li>
                     @endforeach
+                    </ul>
                     <a href="/update-listing/{{$collection->id}}">Change these items</a>
                   @else
                     <p>Nothing in this collection - <a href="/update-listing/{{$collection->id}}">Why not add something?</a></p>
