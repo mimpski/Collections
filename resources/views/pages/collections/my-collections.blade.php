@@ -8,15 +8,11 @@
                 <div class="panel-heading">Collection View</div>
 
                 <div class="panel-body">
+                  @foreach($collections as $collection)
                   <ul>
-                    {{ $collection->name }}
-
-                    @foreach($items as $item)
-
-                    <li>{{$item->identifier}}</li>
-
-                    @endforeach
+                    <li><a href="/edit-collection/{{$collection->id}}">{{ $collection->name }}</a></li>
                   </ul>
+                  @endforeach
                 </div>
             </div>
         </div>

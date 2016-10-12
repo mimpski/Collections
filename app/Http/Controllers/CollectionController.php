@@ -13,26 +13,19 @@ use DB;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-class CollectionController extends Controller
-{
+class CollectionController extends Controller{
 
-    public function __construct()
-    {
+    public function __construct(){
         $this->middleware('auth');
     }
 
+
     public function create_a_collection(){
       $user = Auth::user()->id;
-      return view('pages.create-collection', compact('user'));
+      return view('pages.collections.create-collection', compact('user'));
     }
 
     public function save_collection(Request $request){
-        // Validate all the data that is passed through the form
-        // $this->validate($request, [
-        //     'name' => 'required',
-        //     'user_id' => 'required'
-        // ]);
-        // Turn that data into a request
         $input = Request::all();
 
         // Create the new collection with that data
@@ -40,42 +33,47 @@ class CollectionController extends Controller
         $Collection->name = $input['name'];
         $Collection->user_id = $input['user_id'];
         $Collection->save();
+        $id = $Collection->id;
 
-        return redirect()->route('add_items');
+        $collectionDetails = Collection::all()->where('id', $id)->first();
+
+        // Get the list of items
+        $items = Item::limit(30)->get();
+        //This returns 0, no items have been selected yet.
+        $selectedItems = CollectionItem::where('collection_id', $id)->get(['item']);
+        return view('pages.collections.full-listing', compact('id', 'collectionDetails', 'items', 'selectedItems'));
     }
 
-    public function add_items(){
+    public function add_items($id){
       // Get the users Id
       $user = Auth::user()->id;
 
       // Get the details of the new collections
-      $collectionDetails = Collection::all()->where('user_id', $user)->last();
+      $collectionDetails = Collection::all()->where('id', $id)->first();
 
       // Get the list of items
       $items = Item::limit(30)->get();
-      return view('pages.full-listing', compact('user','items','collectionDetails'));
+      return view('pages.collections.full-listing', compact('user','items','collectionDetails'));
     }
 
     public function view_collection(Request $request){
         // Validate all the data that is passed through the form
         $input = Request::all();
 
-        $item1 = new CollectionItem();
-        $item1->collection_id = $input['collection_id'];
-        $item1->item = $input['item0'];
-        $item1->save();
-
-        $item2 = new CollectionItem();
-        $item2->collection_id = $input['collection_id'];
-        $item2->item = $input['item1'];
-        $item2->save();
-
-        $item3 = new CollectionItem();
-        $item3->collection_id = $input['collection_id'];
-        $item3->item = $input['item2'];
-        $item3->save();
-
         $id = $input['collection_id'];
+
+        $items_checked = $input['item'];
+
+        $collection = CollectionItem::where('collection_id', $id)->delete();
+
+        if(is_array($items_checked)){
+          foreach($items_checked as $item){
+            $value = new CollectionItem();
+            $value->collection_id = $id;
+            $value->item = $item;
+            $value->save();
+          }
+        }
 
         return redirect()->route('individual_collection', compact('id'));
     }
@@ -86,8 +84,48 @@ class CollectionController extends Controller
 
       // Run this raw SQL (must be refactored) to get the item data for the collection
       $items = DB::select( DB::raw("SELECT i.* FROM items i, collections_items ci, collections c WHERE i.id = ci.item AND ci.collection_id = c.id AND c.id = $id;") );
-      
-      return view('pages.view-collection', compact('collection','items'));
+
+      return view('pages.collections.view-collection', compact('collection','items'));
+    }
+
+    public function edit_collection($id){
+      $user = Auth::user()->id;
+      // Get the collection details based on the id
+      $collection = Collection::where('id',$id)->first();
+
+      // Run this raw SQL (must be refactored) to get the item data for the collection
+      $items = DB::select( DB::raw("SELECT i.* FROM items i, collections_items ci, collections c WHERE i.id = ci.item AND ci.collection_id = c.id AND c.id = $id;") );
+
+      return view('pages.collections.edit-collection', compact('collection','items'));
+    }
+
+    public function update_collection(Request $request){
+        $input = Request::all();
+        $id = Request::get('id');
+        // Create the new collection with that data
+        $Collection = Collection::where('id',$id)->first();
+        $Collection->name = $input['name'];
+        $Collection->save();
+        $user = Auth::user()->id;
+        return redirect()->route('my_collections', compact('user'));
+    }
+
+    public function update_items($id){
+      $user = Auth::user()->id;
+      // Get the details of the new collections
+      $collectionDetails = Collection::where('id', $id)->first();
+      // Get the list of items
+      $items = Item::limit(30)->get();
+      // SELECT item FROM collections_items WHERE collection_id = $id;
+      $selectedItems = CollectionItem::where('collection_id', $id)->get(['item']);
+      //dd($selectedItems);
+      return view('pages.collections.full-listing', compact('user','items','collectionDetails','selectedItems'));
+    }
+
+    public function my_collections(){
+      $user = Auth::user()->id;
+      $collections = Collection::where('user_id',$user)->get();
+      return view('pages.collections.my-collections', compact('user', 'collections'));
     }
 
 
