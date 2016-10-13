@@ -3,11 +3,10 @@
 @section('content')
 <div class="container">
     <div class="row">
-        <div class="col-md-10 col-md-offset-1">
-            <div class="panel panel-default">
-                <div class="panel-heading">Edit Collection</div>
+            <div class="card">
+                <div class="card-header">Edit Collection</div>
 
-                <div class="panel-body">
+                <div class="card-block">
                   {!! Form::open(['route' => 'update_collection']) !!}
 
                     {!! Form::hidden('id', $collection->id) !!}
@@ -24,19 +23,21 @@
                   {!! Form::close() !!}
 
                 </div>
+              </div>
+              <div class="card">
 
-                <div class="panel-heading">Featured in this collection</div>
+                <div class="card-header">Featured in this collection</div>
 
-                <div class="panel-body">
+                <div class="card-block">
                   @if($items)
-                  <ul class="collection_item_listing">
+                  <div class="collection_item_listing">
                     @foreach($items as $item)
-                      <li class="{{ $item->type }}">
-                          <p class="item_name">{{ $item->identifier }}</p>
-                          <img src="/images/items/{{ $item->image }}.jpg" alt="Image of {{ $item->identifier }}" class="item_image"/>
-                      </li>
+                    <div class="{{ $item->type }} collection_item_card">
+                        <p class="collection_item_name">{{ $item->identifier }}</p>
+                        <!-- <img src="/images/items/{{ $item->image }}.jpg" alt="Image of {{ $item->identifier }}" class="item_image"/> -->
+                    </div>
                     @endforeach
-                    </ul>
+                  </div>
                     <a href="/update-listing/{{$collection->id}}">Change these items</a>
                   @else
                     <p>Nothing in this collection - <a href="/update-listing/{{$collection->id}}">Why not add something?</a></p>
@@ -44,7 +45,6 @@
                 </div>
 
             </div>
-        </div>
     </div>
 </div>
 @endsection

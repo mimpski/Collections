@@ -1,2 +1,8 @@
-// @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+@import "libs/bootstrap";
+// @import "libs/font-awesome";
 
+@import "variables/fonts";
+@import "variables/colours";
+
+@import "partials/item-listings";
+@import "partials/colour-schemes";

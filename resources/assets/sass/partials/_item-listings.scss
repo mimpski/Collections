@@ -1,0 +1,11 @@
+/*====== ITEM CARDS ======*/
+
+.collection_item_card{
+    @extend .card;
+    @extend .card-block;
+    @extend .col-md-4;
+}
+
+.collection_item_name{
+  @extend .card-title;
+}
